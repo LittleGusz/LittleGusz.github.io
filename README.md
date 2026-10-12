@@ -12,7 +12,7 @@ dari internet, jadi website tampil lengkap walau laptopnya offline.
 - Kalau mau dicopy ke tempat lain, yang wajib ikut: `index.html`, `css/`, `js/`, `assets/` (±86 MB). Susunan foldernya jangan diubah.
 - Yang tetap butuh internet cuma link keluar (LinkedIn) dan kirim email.
 - Di HP/tablet, membuka website langsung dari flashdisk umumnya tidak bisa (browser HP tidak memuat folder website lokal).
-  Supaya bisa dibuka di HP, website perlu di-online-kan dulu. Lihat bagian "Deploy gratis" di bawah.
+  Di HP, buka versi online-nya: https://littlegusz.github.io/ (lihat bagian "Website online" di bawah).
 
 ## Cara isi data asli
 **Cukup edit satu file: `js/data.js`.** HTML, CSS, dan logic nggak perlu disentuh.
@@ -103,15 +103,25 @@ Pemilih bahasa ID/EN di navbar berbentuk selector switch; klik ID, EN, atau knop
 
 Semua animasi otomatis mati kalau pengunjung mengaktifkan *reduce motion*.
 
-## Deploy gratis
-**Netlify (paling gampang):** buka app.netlify.com/drop → drag folder ini → langsung dapat URL.
+## Website online
+Alamat: **https://littlegusz.github.io/** (GitHub Pages, gratis).
+Isinya diambil dari repo `LittleGusz/LittleGusz.github.io` di GitHub, branch `main`. Repo dan website-nya public: semua yang
+di-upload bisa dilihat siapa saja.
 
-**GitHub Pages:**
-1. Buat repo baru, upload semua isi folder ini.
-2. Settings → Pages → Source: `Deploy from a branch`, branch `main`, folder `/root`.
-3. Tunggu 1–2 menit, website ada di `https://username.github.io/nama-repo/`.
+### Meng-update website online
+Mengubah file di folder ini TIDAK otomatis mengubah website online. Setelah ada perubahan, kirim ke GitHub dari folder ini
+(butuh Git, sudah terpasang di laptop yang dipakai men-setting):
+```
+git add -A
+git commit -m "tulis singkat apa yang diubah"
+git push
+```
+Tunggu ±1 menit, lalu refresh website-nya (Ctrl+F5 kalau tampilannya masih yang lama).
 
-Setelah online, ganti URL gambar di meta `og:image` pada `index.html` jadi URL lengkap supaya preview link di WhatsApp/LinkedIn muncul.
+- Folder berawalan `_` (`_file-asli/`, cadangan versi lama) tidak ikut ter-upload; daftarnya ada di file `.gitignore`.
+- Batas GitHub: satu file maksimal 100 MB, dan total website sebaiknya di bawah 1 GB. Video tetap dikompres dulu.
+- Gambar pratinjau saat link dibagikan (WhatsApp/LinkedIn) adalah `assets/img/og-preview.jpg`, diatur lewat meta `og:image`
+  di `index.html`. Kalau alamat website berubah, ganti URL di meta `og:url` dan `og:image`.
 
 ## Struktur
 ```
@@ -125,6 +135,8 @@ assets/img/           favicon, placeholder foto & project
 assets/img/projects/  foto & video project, satu subfolder per project
 assets/fonts/         file font Archivo & Martian Mono + teks lisensinya (OFL)
 assets/cv/            file CV (PDF)
+.gitignore            daftar yang tidak ikut di-upload ke GitHub (folder berawalan _)
+.nojekyll             file kosong; penanda supaya GitHub Pages menyajikan folder ini apa adanya
 _file-asli/           foto & video asli dari HP, per project, sebelum dipotong/dikompres untuk web. Tidak dipakai website dan
                       JANGAN ikut di-upload: ukurannya besar (±360 MB) dan fotonya masih menyimpan lokasi GPS tempat foto diambil
 _versi-sebelum-redesign/  cadangan kode sebelum redesign "Panel Hidup"
