@@ -1,0 +1,12 @@
+# Yang TIDAK ikut di-upload ke GitHub (website-nya public, semua yang di-upload bisa dilihat orang):
+
+# file asli dari HP: besar, dan fotonya masih menyimpan lokasi GPS
+_file-asli/
+
+# cadangan kode versi lama
+_versi-lama/
+_versi-sebelum-redesign/
+
+# file sampah Windows
+Thumbs.db
+desktop.ini

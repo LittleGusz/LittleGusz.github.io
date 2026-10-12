@@ -1,0 +1,21 @@
+Taruh foto, render SolidWorks, screenshot, dan video project di folder ini.
+Biar rapi, bikin satu subfolder per project, contoh:
+
+  assets/img/projects/torque-check/1.jpg
+  assets/img/projects/torque-check/2.jpg
+  assets/img/projects/torque-check/demo.mp4
+
+Lalu tulis path-nya di js/data.js pada project yang bersangkutan, contoh:
+
+  image: "assets/img/projects/torque-check/1.jpg",
+  gallery: [
+    "assets/img/projects/torque-check/2.jpg",
+    { video: "assets/img/projects/torque-check/demo.mp4",
+      poster: "assets/img/projects/torque-check/1.jpg" }
+  ]
+
+Nama folder dan file: huruf kecil semua, tanpa spasi (pakai tanda hubung).
+
+Saran foto : JPG atau WebP, lebar sekitar 1200px, di bawah 300 KB.
+             Foto sampul (image) paling pas yang landscape.
+Saran video: MP4 (H.264), sekitar 720p, usahakan di bawah 20 MB.

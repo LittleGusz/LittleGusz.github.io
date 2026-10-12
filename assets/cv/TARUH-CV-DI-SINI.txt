@@ -1,0 +1,5 @@
+Taruh file CV (PDF) di folder ini, lalu tulis path-nya di js/data.js, contoh:
+
+  cv: "assets/cv/CV-Nama-Lengkap.pdf"
+
+Selama field `cv` kosong, tombol "Download CV" tidak ditampilkan.

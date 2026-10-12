@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Muhamad Agus Firdaus — Mechanical & Electrical Engineer</title>
+  <meta name="description" content="Portofolio Mechanical & Electrical Engineer: PLC programming, perancangan sistem otomasi, dan desain mekanik SolidWorks." />
+  <meta name="theme-color" content="#0c1222" />
+
+  <!-- Open Graph (ganti URL & gambar setelah website online) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Muhamad Agus Firdaus — Mechanical & Electrical Engineer" />
+  <meta property="og:description" content="PLC programming, perancangan sistem otomasi, dan desain mekanik SolidWorks." />
+  <meta property="og:image" content="assets/img/project-electrical.svg" />
+  <meta name="twitter:card" content="summary_large_image" />
+
+  <link rel="icon" href="assets/img/favicon.svg" type="image/svg+xml" />
+  <!-- Font disimpan di assets/fonts/ (bukan dari internet) supaya website tetap tampil benar saat dibuka offline -->
+  <link rel="stylesheet" href="css/fonts.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <a class="skip-link" href="#main" data-i18n="skip">Lewati ke konten</a>
+
+  <!-- ===================== NAVBAR ===================== -->
+  <header class="nav" id="nav">
+    <div class="wrap nav-inner">
+      <a href="#home" class="brand" aria-label="Home">
+        <span class="brand-tag" id="brand-tag">MAF</span>
+        <span class="brand-name" id="brand-name">Muhamad Agus Firdaus</span>
+      </a>
+
+      <!-- tiap link punya warna garis bawah sendiri (c-*) -->
+      <nav class="nav-links" id="nav-links" aria-label="Menu">
+        <a href="#about" class="c-blue" data-section="about" data-i18n="nav_about">Tentang</a>
+        <a href="#skills" class="c-green" data-section="skills" data-i18n="nav_skills">Keahlian</a>
+        <a href="#projects" class="c-volt" data-section="projects" data-i18n="nav_projects">Project</a>
+        <a href="#experience" class="c-orange" data-section="experience" data-i18n="nav_experience">Pengalaman</a>
+        <a href="#certifications" class="c-red" data-section="certifications" data-i18n="nav_certs">Sertifikasi</a>
+        <a href="#contact" class="c-volt" data-section="contact" data-i18n="nav_contact">Kontak</a>
+      </nav>
+
+      <div class="nav-actions">
+        <!-- selector switch 2 posisi untuk bahasa -->
+        <div class="selector" id="selector" role="group" aria-label="Bahasa / Language">
+          <button type="button" data-lang="id" aria-pressed="true">ID</button>
+          <button type="button" class="knob" id="knob" tabindex="-1" aria-hidden="true"><span></span></button>
+          <button type="button" data-lang="en" aria-pressed="false">EN</button>
+        </div>
+        <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="nav-links" data-i18n-aria="menu">
+          <span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <!-- progress scroll, warna 3 fasa R-S-T -->
+    <div class="progress" id="progress" aria-hidden="true"></div>
+  </header>
+
+  <main id="main">
+    <!-- ===================== HERO ===================== -->
+    <section id="home" class="hero">
+      <div class="hero-bg" aria-hidden="true"></div>
+
+      <!-- gelombang sinus 3 fasa R-S-T, digeser 120° satu sama lain -->
+      <div class="waves" aria-hidden="true">
+        <svg viewBox="0 0 1440 200" preserveAspectRatio="xMidYMid slice">
+          <path class="wv-axis" d="M0 100H1440"/>
+          <g>
+            <path class="wv glow wv-r" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+            <path class="wv wv-r" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+          </g>
+          <g transform="translate(-80 0)">
+            <path class="wv glow wv-s" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+            <path class="wv wv-s" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+          </g>
+          <g transform="translate(-160 0)">
+            <path class="wv glow wv-t" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+            <path class="wv wv-t" d="M0 100c51-74.7 69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0s69-74.7 120 0s69 74.7 120 0"/>
+          </g>
+        </svg>
+      </div>
+      <div class="phase-legend" aria-hidden="true">
+        <span><i class="ph-r"></i>R</span><span><i class="ph-s"></i>S</span><span><i class="ph-t"></i>T</span><span>3Ø · 50 HZ</span>
+      </div>
+
+      <div class="wrap hero-grid">
+        <div class="hero-copy">
+          <p class="hero-chip" id="hero-chip" hidden><span class="dot"></span><span id="hero-chip-text"></span></p>
+          <h1 class="hero-name" id="hero-name">Muhamad Agus Firdaus</h1>
+          <div class="hero-sub">
+            <p class="hero-title" id="hero-title"></p>
+            <div class="hero-role" id="hero-role">
+              <span class="role-tag" data-i18n="role_label">PERAN</span>
+              <span class="role-now">
+                <span class="role-led c0" id="role-led" aria-hidden="true"></span>
+                <span class="roller"><span class="roller-track" id="roller-track"></span></span>
+              </span>
+            </div>
+          </div>
+          <p class="hero-lead" id="hero-tagline"></p>
+          <div class="hero-cta">
+            <a href="#projects" class="btn btn-volt"><span data-i18n="btn_projects">Lihat project</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+            <a href="#" id="cv-btn" class="btn btn-line" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_cv">Download CV</span></a>
+          </div>
+        </div>
+
+        <!-- Pintu panel kontrol: interaktif -->
+        <div class="panel-col">
+          <div class="panel-wrap">
+            <div class="panel-glow" aria-hidden="true"></div>
+            <div class="panel" id="panel">
+              <span class="sheen" aria-hidden="true"></span>
+              <i class="screw s1"></i><i class="screw s2"></i><i class="screw s3"></i><i class="screw s4"></i>
+
+              <div class="panel-top">
+                <div class="lamps">
+                  <div class="lamp lamp-white" data-lamp="power"><span class="bulb"></span><span class="plate">POWER</span></div>
+                  <div class="lamp lamp-green" data-lamp="run"><span class="bulb"></span><span class="plate">RUN</span></div>
+                  <div class="lamp lamp-red" data-lamp="stop"><span class="bulb"></span><span class="plate">STOP</span></div>
+                </div>
+                <svg class="warn-sign" viewBox="0 0 40 36" aria-hidden="true">
+                  <path class="warn-tri" d="M20 3 37 33H3z"/>
+                  <path class="warn-bolt" d="M22 11 15 22h5l-2 8 8-12h-5.5l1.5-7z"/>
+                </svg>
+              </div>
+
+              <div class="hmi">
+                <div class="hmi-bar"><span>M1 START/STOP</span><span id="hmi-state">STOP</span></div>
+                <div class="hmi-screen" id="ladder" role="img" data-i18n-aria="ladder_alt"></div>
+              </div>
+
+              <div class="controls">
+                <button type="button" class="pb pb-green" id="pb-start" aria-describedby="panel-hint">
+                  <span class="pb-ring"><span class="pb-cap"></span></span>
+                  <span class="plate">START</span>
+                </button>
+                <button type="button" class="pb pb-red" id="pb-stop" aria-describedby="panel-hint">
+                  <span class="pb-ring"><span class="pb-cap"></span></span>
+                  <span class="plate">STOP</span>
+                </button>
+                <div class="motor" aria-hidden="true">
+                  <svg viewBox="0 0 100 100" class="fan">
+                    <circle cx="50" cy="50" r="46" class="fan-housing"/>
+                    <g id="fan-rotor">
+                      <path d="M50 50 C 44 30, 46 14, 58 8 C 64 22, 60 38, 50 50Z"/>
+                      <path d="M50 50 C 44 30, 46 14, 58 8 C 64 22, 60 38, 50 50Z" transform="rotate(90 50 50)"/>
+                      <path d="M50 50 C 44 30, 46 14, 58 8 C 64 22, 60 38, 50 50Z" transform="rotate(180 50 50)"/>
+                      <path d="M50 50 C 44 30, 46 14, 58 8 C 64 22, 60 38, 50 50Z" transform="rotate(270 50 50)"/>
+                      <circle cx="50" cy="50" r="7" class="fan-hub"/>
+                    </g>
+                  </svg>
+                  <span class="plate">M1</span>
+                </div>
+              </div>
+            </div>
+            <p class="panel-hint" id="panel-hint" data-i18n="panel_hint"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== PITA BERJALAN ===================== -->
+    <section class="ticker" id="ticker" data-i18n-aria="ticker_label">
+      <div class="tk tk-back" id="tk-back-band" aria-hidden="true"><div class="tk-track" id="tk-back"></div></div>
+      <div class="tk tk-front"><div class="tk-track" id="tk-front"></div></div>
+    </section>
+
+    <!-- ===================== ABOUT ===================== -->
+    <section id="about" class="about">
+      <div class="about-bg" aria-hidden="true"></div>
+      <div class="wrap about-grid">
+        <figure class="portrait rv" data-rv="about-photo">
+          <div class="gear gear-portrait" aria-hidden="true">
+            <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="78" class="gear-teeth"/><circle cx="100" cy="100" r="66" class="gear-ring"/><circle cx="100" cy="100" r="44" class="gear-dash"/><circle cx="100" cy="100" r="22" class="gear-ring"/></svg>
+          </div>
+          <span class="portrait-block" aria-hidden="true"></span>
+          <span class="portrait-line" aria-hidden="true"></span>
+          <img id="about-photo" src="assets/img/profile-placeholder.svg" alt="" width="480" height="560" />
+        </figure>
+        <div class="about-body">
+          <div class="sec-head-block rv" data-rv="about-head">
+            <h2 class="sec-title" data-i18n="sec_about">Tentang saya</h2>
+            <div class="code-bar cb-about" aria-hidden="true"><i></i><i></i><i></i></div>
+          </div>
+          <div class="about-text rv" id="about-paras" data-rv="about-text"></div>
+
+          <!-- rating plate seperti nameplate motor; angkanya "dikocok" saat muncul -->
+          <div class="rating-plate rv" id="rating-plate" data-rv="about-plate">
+            <i class="rivet r1"></i><i class="rivet r2"></i><i class="rivet r3"></i><i class="rivet r4"></i>
+            <div class="rp-head">
+              <span class="rp-name" id="rp-name"></span>
+              <span class="rp-type" id="rp-type"></span>
+            </div>
+            <dl class="rp-grid" id="rp-grid"></dl>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== SKILLS ===================== -->
+    <section id="skills" class="section skills-sec">
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-head-block rv" data-rv="skills-head">
+            <h2 class="sec-title" data-i18n="sec_skills">Keahlian</h2>
+            <div class="code-bar cb-skills" aria-hidden="true"><i></i><i></i><i></i></div>
+          </div>
+          <div class="legend" id="level-legend"></div>
+        </div>
+        <div class="skills rvp" id="skills-grid" data-rv="skills-grid"></div>
+      </div>
+    </section>
+
+    <!-- ===================== PROJECTS (kertas blueprint) ===================== -->
+    <section id="projects" class="projects-sec">
+      <div class="projects-bg" aria-hidden="true"></div>
+      <div class="scan" aria-hidden="true"></div>
+      <div class="gear gear-big" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="78" class="gear-teeth"/><circle cx="100" cy="100" r="66" class="gear-ring"/><circle cx="100" cy="100" r="44" class="gear-dash"/><circle cx="100" cy="100" r="22" class="gear-ring"/></svg>
+      </div>
+      <div class="gear gear-small" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="78" class="gear-teeth"/><circle cx="100" cy="100" r="66" class="gear-ring"/><circle cx="100" cy="100" r="22" class="gear-ring"/></svg>
+      </div>
+      <div class="wrap">
+        <div class="sec-head">
+          <div class="sec-head-block rv" data-rv="proj-head">
+            <h2 class="sec-title" data-i18n="sec_projects">Project</h2>
+            <div class="code-bar cb-proj" aria-hidden="true"><i></i><i></i><i></i></div>
+          </div>
+          <div class="filters" id="filters" role="group" data-i18n-aria="filter_label"></div>
+        </div>
+        <div class="projects rv" id="projects-grid" data-rv="proj-grid"></div>
+        <p class="empty-note" id="projects-empty" hidden></p>
+      </div>
+    </section>
+
+    <!-- ===================== EXPERIENCE ===================== -->
+    <section id="experience" class="exp-sec">
+      <div class="bus" aria-hidden="true"><i></i><i></i><i></i></div>
+      <div class="wrap">
+        <div class="sec-head-block rv" data-rv="exp-head">
+          <h2 class="sec-title" data-i18n="sec_experience">Pengalaman & pendidikan</h2>
+          <div class="code-bar cb-exp" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <!-- kabel timeline "dialiri arus", berakhir di simbol ground -->
+        <div class="timeline-wrap rvp" data-rv="exp-list">
+          <div class="wire" aria-hidden="true"><span></span></div>
+          <svg class="ground" viewBox="0 0 20 14" aria-hidden="true"><path d="M1 1h18M5 7h10M8.5 13h3"/></svg>
+          <ol class="timeline" id="timeline"></ol>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== CERTIFICATIONS ===================== -->
+    <section id="certifications" class="cert-sec">
+      <div class="wrap">
+        <div class="sec-head-block rv" data-rv="cert-head">
+          <h2 class="sec-title" data-i18n="sec_certs">Sertifikasi & pelatihan</h2>
+          <div class="code-bar cb-cert" aria-hidden="true"><i></i><i></i><i></i></div>
+        </div>
+        <ul class="certs" id="certs-grid"></ul>
+      </div>
+    </section>
+
+    <!-- ===================== CONTACT (blok kuning) ===================== -->
+    <section id="contact" class="contact">
+      <div class="hazard" aria-hidden="true"></div>
+      <div class="gear gear-contact" aria-hidden="true">
+        <svg viewBox="0 0 200 200"><circle cx="100" cy="100" r="78" class="gear-teeth"/><circle cx="100" cy="100" r="66" class="gear-ring"/><circle cx="100" cy="100" r="44" class="gear-dash"/><circle cx="100" cy="100" r="22" class="gear-ring"/></svg>
+      </div>
+      <div class="wrap contact-grid">
+        <div class="contact-left rv" data-rv="contact-left">
+          <p class="contact-status" id="contact-status" hidden></p>
+          <h2 class="contact-title" data-i18n="contact_title"></h2>
+          <div class="code-bar cb-contact" aria-hidden="true"><i></i><i></i><i></i></div>
+          <p class="contact-lead" data-i18n="contact_lead"></p>
+        </div>
+        <ul class="contact-list rv" id="contact-list" data-rv="contact-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="bus" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="wrap footer-inner">
+      <p id="footer-copy"></p>
+      <a href="#home" class="to-top"><span data-i18n="back_top">Kembali ke atas</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 19V5M6 11l6-6 6 6"/></svg></a>
+    </div>
+  </footer>
+
+  <!-- ===================== PROJECT MODAL ===================== -->
+  <div class="modal" id="modal" hidden>
+    <div class="modal-backdrop" data-close></div>
+    <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title" tabindex="-1">
+      <button class="modal-close" type="button" data-close data-i18n-aria="modal_close">
+        <svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>
+      </button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <!-- Urutan penting: data → teks UI → logic. Bukan ES module supaya jalan dari file:// -->
+  <script src="js/data.js"></script>
+  <script src="js/i18n.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
