@@ -35,6 +35,13 @@ window.PORTFOLIO = {
 
     photo: "assets/img/profile-placeholder.svg",
     cv: "assets/cv/CV-Muhamad-Agus-Firdaus.pdf",   // kosong "" = tombol CV disembunyikan
+    // PDF portofolio, dibuat otomatis dari isi file ini: dobel-klik pdf-portofolio/buat-pdf.cmd.
+    // Boleh satu file untuk dua bahasa (string biasa), atau beda per bahasa seperti di bawah.
+    // Kosong "" = tombol Download Portofolio disembunyikan
+    portfolio: {
+      id: "assets/portfolio/Portofolio-Muhamad-Agus-Firdaus.pdf",
+      en: "assets/portfolio/Portfolio-Muhamad-Agus-Firdaus-EN.pdf"
+    },
 
     availability: { id: "Terbuka untuk project & pekerjaan", en: "Open to projects & roles" },
     location: { id: "Bekasi, Jawa Barat", en: "Bekasi, West Java" },
@@ -65,7 +72,8 @@ window.PORTFOLIO = {
     linkedin: "https://www.linkedin.com/in/muhamad-agus-firdaus-9563562b6",
     linkedinName: "Muhamad Agus Firdaus", // teks yang tampil; kosong "" = tampilkan URL-nya
     whatsapp: "",                         // format internasional tanpa + dan tanpa spasi, mis. "628xxxxxxxxxx"
-    location: { id: "Bekasi, Jawa Barat, Indonesia", en: "Bekasi, West Java, Indonesia" }
+    location: { id: "Bekasi, Jawa Barat, Indonesia", en: "Bekasi, West Java, Indonesia" },
+    website: "https://littlegusz.github.io/" // alamat website ini; ditulis di PDF portofolio (video project ada di sini)
   },
 
   /* ---------- PITA BERJALAN (di bawah hero) ----------
@@ -169,24 +177,6 @@ window.PORTFOLIO = {
                    caption: { id: "Mesin saat berjalan otomatis", en: "The machine running in automatic mode" } }
                ]                                                                                   */
   projects: [
-    {
-      category: "electrical",
-      title: { id: "Sistem Kontrol Mesin Cutting / Measuring Plate", en: "Plate Cutting / Measuring Machine Control System" },
-      role: { id: "PLC Programmer & Panel Builder", en: "PLC Programmer & Panel Builder" },
-      year: "",
-      summary: {
-        id: "Sistem kontrol untuk mesin cutting / measuring plate untuk klien manufaktur.",
-        en: "Control system for a plate cutting / measuring machine for a manufacturing client."
-      },
-      tools: ["PLC", { id: "Panel Kontrol", en: "Control Panel" }],
-      image: "assets/img/project-electrical.svg",        // belum ada dokumentasi: taruh fotonya di assets/img/projects/cutting-plate/
-      work: [
-        { id: "Memilih komponen sistem kontrol", en: "Selected the control system components" },
-        { id: "Merakit panel kontrol", en: "Assembled the control panel" },
-        { id: "Membuat program PLC", en: "Wrote the PLC program" }
-      ],
-      gallery: []
-    },
     {
       category: "electrical",
       title: { id: "Sistem Kontrol Mesin Torque Check", en: "Torque Check Machine Control System" },
@@ -582,6 +572,26 @@ window.PORTFOLIO = {
           }
         }
       ]
+    },
+    // Belum ada foto, jadi ditaruh di bawah supaya kartu besar (project paling atas) memakai foto asli.
+    // Kalau fotonya sudah ada, boleh dipindah lagi ke urutan pertama.
+    {
+      category: "electrical",
+      title: { id: "Sistem Kontrol Mesin Cutting / Measuring Plate", en: "Plate Cutting / Measuring Machine Control System" },
+      role: { id: "PLC Programmer & Panel Builder", en: "PLC Programmer & Panel Builder" },
+      year: "",
+      summary: {
+        id: "Sistem kontrol untuk mesin cutting / measuring plate untuk klien manufaktur.",
+        en: "Control system for a plate cutting / measuring machine for a manufacturing client."
+      },
+      tools: ["PLC", { id: "Panel Kontrol", en: "Control Panel" }],
+      image: "assets/img/project-electrical.svg",        // belum ada dokumentasi: taruh fotonya di assets/img/projects/cutting-plate/
+      work: [
+        { id: "Memilih komponen sistem kontrol", en: "Selected the control system components" },
+        { id: "Merakit panel kontrol", en: "Assembled the control panel" },
+        { id: "Membuat program PLC", en: "Wrote the PLC program" }
+      ],
+      gallery: []
     },
     {
       category: "mechanical",

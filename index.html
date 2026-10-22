@@ -62,7 +62,11 @@
   <main id="main">
     <!-- ===================== HERO ===================== -->
     <section id="home" class="hero">
+      <!-- cahaya warna fasa R-S-T + hijau RUN yang bergeser pelan di belakang hero -->
+      <div class="aurora" aria-hidden="true"><i class="au-1"></i><i class="au-2"></i><i class="au-3"></i></div>
       <div class="hero-bg" aria-hidden="true"></div>
+      <!-- grid blueprint yang menyala warna-warni di sekitar kursor (posisinya diatur main.js) -->
+      <div class="hero-spot" id="hero-spot" aria-hidden="true"><i></i></div>
 
       <!-- gelombang sinus 3 fasa R-S-T, digeser 120° satu sama lain -->
       <div class="waves" aria-hidden="true">
@@ -103,7 +107,9 @@
           <p class="hero-lead" id="hero-tagline"></p>
           <div class="hero-cta">
             <a href="#projects" class="btn btn-volt"><span data-i18n="btn_projects">Lihat project</span><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
-            <a href="#" id="cv-btn" class="btn btn-line" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_cv">Download CV</span></a>
+            <!-- tombol download: file-nya diatur di data.js (cv & portfolio); yang kosong disembunyikan -->
+            <a href="#" class="btn btn-dl dl-cv" data-dl="cv" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_cv">Download CV</span></a>
+            <a href="#" class="btn btn-dl dl-pf" data-dl="portfolio" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_portfolio">Download Portofolio</span></a>
           </div>
         </div>
 
@@ -277,6 +283,10 @@
           <h2 class="contact-title" data-i18n="contact_title"></h2>
           <div class="code-bar cb-contact" aria-hidden="true"><i></i><i></i><i></i></div>
           <p class="contact-lead" data-i18n="contact_lead"></p>
+          <div class="contact-dl" id="contact-dl">
+            <a href="#" class="btn btn-dl dl-cv" data-dl="cv" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_cv">Download CV</span></a>
+            <a href="#" class="btn btn-dl dl-pf" data-dl="portfolio" download><svg class="ic" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg><span data-i18n="btn_portfolio">Download Portofolio</span></a>
+          </div>
         </div>
         <ul class="contact-list rv" id="contact-list" data-rv="contact-list"></ul>
       </div>

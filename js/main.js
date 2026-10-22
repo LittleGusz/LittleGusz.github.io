@@ -175,10 +175,19 @@
      ================================================================ */
   function applyStaticI18n() {
     document.documentElement.lang = lang;
-    $$("[data-i18n]").forEach(function (n) { n.textContent = ui(n.dataset.i18n); });
+    $$("[data-i18n]").forEach(function (n) {
+      if (n.classList.contains("sec-title")) accentLast(n, ui(n.dataset.i18n));
+      else n.textContent = ui(n.dataset.i18n);
+    });
     $$("[data-i18n-aria]").forEach(function (n) { n.setAttribute("aria-label", ui(n.dataset.i18nAria)); });
     $$(".selector button[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
     $("#selector").dataset.pos = lang;
+  }
+  // kata terakhir judul section diberi warna section-nya, seperti nama di hero (judul satu kata: seluruhnya)
+  function accentLast(node, text) {
+    var i = text.lastIndexOf(" ");
+    node.textContent = text.slice(0, i + 1);
+    node.appendChild(el("span", { class: "tw", text: text.slice(i + 1) }));
   }
 
   /* ================================================================
@@ -202,8 +211,14 @@
 
     renderRoles(p.roles || []);
 
-    var cv = $("#cv-btn");
-    if (p.cv) { cv.hidden = false; cv.setAttribute("href", p.cv); } else cv.hidden = true;
+    // tombol download di hero & kontak; file portofolio boleh beda per bahasa
+    var files = { cv: t(p.cv), portfolio: t(p.portfolio) };
+    $$("[data-dl]").forEach(function (a) {
+      var f = files[a.dataset.dl];
+      a.hidden = !f;
+      if (f) a.setAttribute("href", f);
+    });
+    $("#contact-dl").hidden = !files.cv && !files.portfolio;
   }
 
   // nama dipecah per kata supaya bisa naik bergantian; kata terakhir kuning
@@ -499,7 +514,7 @@
           meter(LEVELS[lv] || 1, 300 + gi * 110 + ii * 70)));
       });
       grid.appendChild(el("div", { class: "rv-c", style: "transition-delay:" + gi * 110 + "ms" },
-        el("section", { class: "skill-card sk-" + tone },
+        el("section", { class: "skill-card spot sk-" + tone },
           el("div", { class: "skill-head" }, el("span", { class: "skill-ic" }, icon(g.icon || "gear")), el("h3", { text: t(g.group) })),
           list)));
     });
@@ -869,7 +884,7 @@
       var live = NOW_RE.test(typeof raw === "string" ? raw : [raw.id, raw.en].join(" "));
       var pts = el("ul", { class: "tl-points" });
       (x.points || []).forEach(function (p) { pts.appendChild(el("li", { text: t(p) })); });
-      ol.appendChild(reveal(el("li", { class: "tl-item rv " + type },
+      ol.appendChild(reveal(el("li", { class: "tl-item rv " + type + (live ? " now" : "") },
         el("span", { class: "tl-node" + (live ? " live" : ""), "aria-hidden": "true" }),
         el("div", { class: "tl-when" }, el("span", { class: "tl-period", text: t(x.period) }), el("span", { class: "tl-type", text: ui("exp_" + type) })),
         el("div", { class: "tl-what" },
@@ -908,8 +923,8 @@
         c.url ? icon("out") : null
       ];
       var card = c.url
-        ? el("a", { class: "cert", href: c.url, target: "_blank", rel: "noopener", title: ui("cert_view") }, body)
-        : el("div", { class: "cert" }, body);
+        ? el("a", { class: "cert spot", href: c.url, target: "_blank", rel: "noopener", title: ui("cert_view") }, body)
+        : el("div", { class: "cert spot" }, body);
       ul.appendChild(reveal(el("li", { class: "rv" }, card), "cert-card-" + i));
     });
     toggleSection("certifications", has(D.certifications));
@@ -1008,6 +1023,36 @@
   }
 
   /* ================================================================
+     SOROTAN WARNA — grid hero menyala di sekitar kursor, kartu (.spot)
+     diberi cahaya warna kartunya di titik kursor. Hanya untuk mouse/
+     trackpad; mati saat reduce motion.
+     ================================================================ */
+  function bindGlow() {
+    if (REDUCE || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+    var hero = $("#home"), spot = $("#hero-spot"), x = 0, y = 0, raf = 0;
+    hero.addEventListener("pointermove", function (e) {
+      var r = hero.getBoundingClientRect();
+      x = e.clientX - r.left; y = e.clientY - r.top;
+      if (raf) return;
+      raf = requestAnimationFrame(function () {
+        raf = 0;
+        spot.style.setProperty("--mx", x + "px");
+        spot.style.setProperty("--my", y + "px");
+        spot.classList.add("on");
+      });
+    });
+    hero.addEventListener("pointerleave", function () { spot.classList.remove("on"); });
+
+    document.addEventListener("pointermove", function (e) {
+      var c = e.target.closest && e.target.closest(".spot");
+      if (!c) return;
+      var r = c.getBoundingClientRect();
+      c.style.setProperty("--px", (e.clientX - r.left) + "px");
+      c.style.setProperty("--py", (e.clientY - r.top) + "px");
+    }, { passive: true });
+  }
+
+  /* ================================================================
      INIT
      ================================================================ */
   function renderAll() {
@@ -1029,5 +1074,6 @@
   $$("[data-rv]").forEach(function (n) { reveal(n); });
   bindNav();
   bindModal();
+  bindGlow();
   initPanel();
 })();

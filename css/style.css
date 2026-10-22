@@ -60,6 +60,12 @@ dl, dd { margin: 0; }
 mark { background: none; color: inherit; }
 [hidden] { display: none !important; }
 ::selection { background: var(--volt); color: var(--ink); }
+/* scrollbar warna 3 fasa (Chrome, Edge, Safari); Firefox cukup satu warna */
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: var(--ink-2); }
+::-webkit-scrollbar-thumb { border: 3px solid var(--ink-2); border-radius: 8px; background: linear-gradient(var(--stop), var(--volt), var(--cad)); }
+::-webkit-scrollbar-thumb:horizontal { background: linear-gradient(90deg, var(--stop), var(--volt), var(--cad)); }
+@supports not selector(::-webkit-scrollbar) { html { scrollbar-color: var(--volt) var(--ink-2); } }
 
 .wrap { width: 100%; max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gut); }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -154,9 +160,13 @@ mark { background: none; color: inherit; }
 .btn-volt { background: var(--volt); color: var(--ink); }
 .btn-volt:hover { background: #ffe07a; box-shadow: 0 0 0 5px color-mix(in srgb, var(--volt) 18%, transparent), 0 14px 34px -12px color-mix(in srgb, var(--volt) 70%, transparent); }
 .btn-volt:hover .ic { transform: translateX(4px); }
-.btn-line { border-color: #33426b; color: var(--paper); }
-.btn-line:hover { border-color: var(--cad); color: #fff; box-shadow: 0 0 0 5px color-mix(in srgb, var(--cad) 14%, transparent); }
-.btn-line:hover .ic { transform: translateY(2px); }
+/* tombol download: CV biru (fasa T), portofolio hijau (RUN). Hover = terisi penuh warnanya */
+.btn-dl { --c: var(--cad); color: var(--paper); border-color: color-mix(in srgb, var(--c) 62%, transparent); background: color-mix(in srgb, var(--c) 12%, transparent); }
+.btn-dl .ic { color: var(--c); transition: transform .3s var(--ease), color .2s; }
+.btn-dl:hover { background: var(--c); border-color: var(--c); color: var(--ink); box-shadow: 0 0 0 5px color-mix(in srgb, var(--c) 18%, transparent), 0 14px 34px -12px color-mix(in srgb, var(--c) 70%, transparent); }
+.btn-dl:hover .ic { color: var(--ink); transform: translateY(2px); }
+.dl-cv { --c: var(--cad); }
+.dl-pf { --c: var(--run); }
 
 /* =====================================================================
    HERO
@@ -172,6 +182,25 @@ mark { background: none; color: inherit; }
     linear-gradient(90deg, color-mix(in srgb, var(--cad) 5%, transparent) 1px, transparent 1px);
   background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
   -webkit-mask-image: linear-gradient(#000 55%, transparent); mask-image: linear-gradient(#000 55%, transparent);
+}
+/* aurora: gumpalan cahaya biru (T), merah (R), hijau (RUN) yang bergeser pelan */
+.aurora { position: absolute; inset: 0; overflow: hidden; pointer-events: none; }
+.aurora i { position: absolute; aspect-ratio: 1; border-radius: 50%; animation: drift 24s ease-in-out infinite alternate; }
+.au-1 { left: -14%; top: -34%; width: min(920px, 80vw); background: radial-gradient(closest-side, color-mix(in srgb, var(--cad) 32%, transparent), transparent); }
+.au-2 { right: -16%; top: 4%; width: min(780px, 70vw); background: radial-gradient(closest-side, color-mix(in srgb, var(--stop) 24%, transparent), transparent); animation-duration: 28s; animation-delay: -9s; }
+.au-3 { left: 22%; bottom: -42%; width: min(760px, 70vw); background: radial-gradient(closest-side, color-mix(in srgb, var(--run) 18%, transparent), transparent); animation-duration: 32s; animation-delay: -17s; }
+/* grid yang menyala di sekitar kursor: lapisan gradasi R-S-RUN-T yang hanya terlihat di garis grid (24px, sama dengan .hero-bg) */
+.hero-spot {
+  position: absolute; inset: 0; pointer-events: none; opacity: 0; transition: opacity .5s;
+  -webkit-mask-image: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 50%), #000, transparent);
+  mask-image: radial-gradient(circle 240px at var(--mx, 50%) var(--my, 50%), #000, transparent);
+}
+.hero-spot.on { opacity: 1; }
+.hero-spot i {
+  position: absolute; inset: 0; background: linear-gradient(115deg, var(--stop), var(--volt) 35%, var(--run) 65%, var(--cad));
+  -webkit-mask-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px);
+  mask-image: linear-gradient(#000 1px, transparent 1px), linear-gradient(90deg, #000 1px, transparent 1px);
+  -webkit-mask-size: 24px 24px; mask-size: 24px 24px;
 }
 .hero-grid { position: relative; z-index: 1; display: flex; flex-wrap: wrap; align-items: center; gap: 56px 72px; }
 .hero-copy { flex: 1.15 1 540px; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 26px; }
@@ -361,6 +390,9 @@ mark { background: none; color: inherit; }
 .sec-head { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 22px 32px; margin-bottom: 48px; }
 .sec-head-block { display: flex; flex-direction: column; gap: 14px; }
 .sec-title { font-size: clamp(44px, 6.4vw, 88px); line-height: .95; text-wrap: balance; }
+/* kata terakhir judul (dibungkus main.js) memakai warna section-nya, seperti nama di hero */
+.sec-title .tw { color: var(--tc, var(--volt)); }
+.about { --tc: var(--cad-deep); } .skills-sec { --tc: var(--run); } .projects-sec { --tc: var(--volt); } .exp-sec { --tc: var(--orange); } .cert-sec { --tc: var(--stop); }
 .code-bar { display: flex; gap: 6px; }
 .code-bar i { display: block; height: 8px; border-radius: 2px; transform-origin: left; transition: transform .9s var(--ease) .15s; }
 .code-bar i:nth-child(1) { width: 120px; background: var(--c1); }
@@ -384,7 +416,15 @@ mark { background: none; color: inherit; }
 /* =====================================================================
    ABOUT (latar terang seperti pintu panel)
    ===================================================================== */
-.about { position: relative; overflow: hidden; padding: var(--sec) 0; background: var(--steel); color: var(--steel-ink); }
+.about {
+  position: relative; overflow: hidden; padding: var(--sec) 0; color: var(--steel-ink);
+  /* cahaya kuning di belakang foto, biru di kanan atas */
+  background:
+    radial-gradient(44% 62% at 0% 100%, color-mix(in srgb, var(--volt) 34%, transparent), transparent 72%),
+    radial-gradient(42% 58% at 100% 0%, color-mix(in srgb, var(--cad) 26%, transparent), transparent 72%),
+    radial-gradient(30% 40% at 100% 100%, color-mix(in srgb, var(--run) 16%, transparent), transparent 72%),
+    var(--steel);
+}
 .about-bg {
   position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -449,7 +489,15 @@ mark { background: none; color: inherit; }
 /* =====================================================================
    SKILLS
    ===================================================================== */
-.skills-sec { background: var(--ink); }
+/* tiap section gelap punya cahaya warna sendiri, diambil dari warna isinya */
+.skills-sec {
+  background:
+    radial-gradient(44% 40% at 0% 0%, color-mix(in srgb, var(--run) 17%, transparent), transparent 72%),
+    radial-gradient(38% 42% at 100% 26%, color-mix(in srgb, var(--volt) 11%, transparent), transparent 72%),
+    radial-gradient(40% 40% at 6% 100%, color-mix(in srgb, var(--cad) 15%, transparent), transparent 72%),
+    radial-gradient(46% 44% at 92% 100%, color-mix(in srgb, var(--orange) 15%, transparent), transparent 72%),
+    var(--ink);
+}
 .legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 14px; color: var(--muted); }
 .legend .lv { display: inline-flex; align-items: center; gap: 9px; }
 .meter { display: inline-flex; gap: 5px; flex: none; }
@@ -461,7 +509,8 @@ mark { background: none; color: inherit; }
 .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(460px, 100%), 1fr)); gap: 24px; }
 .skill-card {
   --c: var(--volt); position: relative; height: 100%; border-radius: 14px; overflow: hidden;
-  background: var(--panel); border: 1px solid var(--line);
+  background: linear-gradient(180deg, color-mix(in srgb, var(--c) 13%, var(--panel)), var(--panel) 78%);
+  border: 1px solid color-mix(in srgb, var(--c) 30%, var(--line));
   transition: transform .35s var(--ease), box-shadow .35s, border-color .35s;
 }
 .skill-card:hover { transform: translateY(-5px); border-color: color-mix(in srgb, var(--c) 60%, transparent); box-shadow: 0 26px 50px -26px color-mix(in srgb, var(--c) 50%, transparent); }
@@ -471,15 +520,30 @@ mark { background: none; color: inherit; }
 .skill-ic .ic { width: 20px; height: 20px; }
 .skill-head h3 { font-size: 21px; font-weight: 800; font-stretch: 88%; line-height: 1.15; }
 .skill-list { padding: 4px 22px 12px; }
-.skill-list li { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 13px 0; border-bottom: 1px solid #1f2b4d; }
+.skill-list li { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 13px 0; border-bottom: 1px solid color-mix(in srgb, var(--c) 18%, #1f2b4d); }
 .skill-list li:last-child { border-bottom: 0; }
 .skill-name { font-size: 16px; }
 .skill-card .meter i.on { background: var(--c); box-shadow: 0 0 10px color-mix(in srgb, var(--c) 75%, transparent); }
 
+/* sorotan warna kartu yang mengikuti kursor (.spot; posisi --px/--py dari main.js) */
+.spot::after {
+  content: ""; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; opacity: 0; transition: opacity .3s;
+  background: radial-gradient(380px circle at var(--px, 50%) var(--py, 50%), color-mix(in srgb, var(--c) 18%, transparent), transparent 65%);
+}
+.spot:hover::after { opacity: 1; }
+
 /* =====================================================================
    PROJECTS (kertas blueprint biru)
    ===================================================================== */
-.projects-sec { position: relative; overflow: hidden; padding: var(--sec) 0 120px; background: var(--blueprint); color: #f4f6fb; }
+.projects-sec {
+  position: relative; overflow: hidden; padding: var(--sec) 0 120px; color: #f4f6fb;
+  /* kertas blueprint dengan cahaya biru terang di kiri atas dan merah keunguan di kanan bawah */
+  background:
+    radial-gradient(48% 34% at 0% 0%, color-mix(in srgb, var(--cad) 42%, transparent), transparent 72%),
+    radial-gradient(50% 36% at 100% 100%, color-mix(in srgb, var(--stop) 24%, transparent), transparent 72%),
+    radial-gradient(36% 30% at 100% 38%, color-mix(in srgb, var(--run) 12%, transparent), transparent 72%),
+    var(--blueprint);
+}
 .projects-bg {
   position: absolute; inset: 0; pointer-events: none;
   background-image:
@@ -562,7 +626,7 @@ mark { background: none; color: inherit; }
   padding: 8px 12px; border-radius: 8px; background: rgba(12, 18, 34, .86); color: var(--paper); font-size: 14px; line-height: 1.4;
 }
 .card-cap-n { flex: none; font-family: var(--mono); font-size: 11px; color: var(--c); }
-.card-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; }
+.card-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; background: linear-gradient(180deg, color-mix(in srgb, var(--c) 9%, transparent), transparent 70%); }
 .card-meta { display: flex; align-items: center; gap: 10px 12px; font-size: 13px; }
 .card-cat { display: inline-flex; align-items: center; gap: 8px; color: var(--c); font-weight: 750; font-size: 13px; }
 .card-cat::before { content: ""; width: 8px; height: 8px; border-radius: 2px; background: var(--c); box-shadow: 0 0 10px var(--c); }
@@ -689,7 +753,13 @@ mark { background: none; color: inherit; }
 /* =====================================================================
    EXPERIENCE (timeline = kabel yang dialiri arus)
    ===================================================================== */
-.exp-sec { position: relative; padding: 0 0 64px; background: var(--ink); }
+.exp-sec {
+  position: relative; padding: 0 0 64px;
+  background:
+    radial-gradient(42% 30% at 0% 10%, color-mix(in srgb, var(--orange) 15%, transparent), transparent 72%),
+    radial-gradient(40% 30% at 100% 46%, color-mix(in srgb, var(--run) 12%, transparent), transparent 72%),
+    var(--ink);
+}
 .exp-sec .wrap { padding-top: 104px; }
 .exp-sec .sec-head-block, .cert-sec .sec-head-block { margin-bottom: 40px; }
 /* bus bar 3 fasa dengan arus mengalir */
@@ -717,11 +787,13 @@ mark { background: none; color: inherit; }
   border-top: 1px solid var(--line-2); transition: opacity .9s var(--ease), transform .9s var(--ease), background .3s;
 }
 .tl-item.education { --c: var(--orange); }
-.tl-item:hover { background: rgba(255,255,255,.025); }
+.tl-item:hover { background: color-mix(in srgb, var(--c) 7%, transparent); }
+/* pekerjaan yang masih berjalan disorot */
+.tl-item.now { background: linear-gradient(90deg, color-mix(in srgb, var(--c) 11%, transparent), transparent 80%); }
 .tl-node { position: absolute; left: 0; top: 36px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--c); background: var(--ink); box-shadow: 0 0 0 4px color-mix(in srgb, var(--c) 14%, transparent); }
 .tl-node.live { background: var(--c); animation: pulse 2s infinite; }
 .tl-when { flex: 0 0 236px; display: flex; flex-direction: column; align-items: flex-start; gap: 10px; }
-.tl-period { font-size: 28px; line-height: 1; font-stretch: 66%; }
+.tl-period { font-size: 28px; line-height: 1; font-stretch: 66%; color: var(--c); }
 .tl-type { display: inline-flex; align-items: center; gap: 8px; padding: 4px 11px; border-radius: 999px; font-size: 13px; font-weight: 700; color: var(--c); background: color-mix(in srgb, var(--c) 13%, transparent); }
 .tl-type::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: currentColor; }
 .tl-what { flex: 1 1 420px; min-width: 0; }
@@ -734,11 +806,19 @@ mark { background: none; color: inherit; }
 /* =====================================================================
    CERTIFICATIONS (stempel yang berputar)
    ===================================================================== */
-.cert-sec { padding: 72px 0 var(--sec); background: var(--ink); }
+.cert-sec {
+  padding: 72px 0 var(--sec);
+  background:
+    radial-gradient(560px 300px at 92% 62%, color-mix(in srgb, var(--stop) 15%, transparent), transparent 72%),
+    radial-gradient(440px 260px at 6% 70%, color-mix(in srgb, var(--volt) 9%, transparent), transparent 72%),
+    var(--ink);
+}
 .certs { display: flex; flex-direction: column; gap: 16px; }
 .cert {
-  position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; gap: 24px 40px;
-  padding: 26px clamp(20px, 3vw, 36px); border-radius: 18px; background: var(--panel); border: 1px solid var(--line);
+  --c: var(--stop); position: relative; overflow: hidden; display: flex; flex-wrap: wrap; align-items: center; gap: 24px 40px;
+  padding: 26px clamp(20px, 3vw, 36px); border-radius: 18px;
+  background: linear-gradient(105deg, color-mix(in srgb, var(--stop) 17%, var(--panel)), var(--panel) 52%, color-mix(in srgb, var(--volt) 7%, var(--panel)));
+  border: 1px solid color-mix(in srgb, var(--stop) 32%, var(--line));
   transition: border-color .3s, box-shadow .3s, transform .35s var(--ease);
 }
 .cert:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--stop) 55%, transparent); box-shadow: 0 26px 50px -26px color-mix(in srgb, var(--stop) 50%, transparent); }
@@ -771,6 +851,11 @@ a.cert:hover > .ic { color: var(--volt); transform: translate(2px, -2px); }
 .contact-status::before { content: ""; width: 10px; height: 10px; border-radius: 50%; background: var(--run); flex: none; animation: pulse 2s infinite; }
 .contact-title { font-size: clamp(56px, 8.4vw, 124px); line-height: .88; font-weight: 900; letter-spacing: -.01em; text-wrap: balance; }
 .contact-lead { font-size: clamp(17px, 1.6vw, 19px); max-width: 42ch; color: #2b2a1c; text-wrap: pretty; }
+/* tombol download di blok kuning: hitam, ikon berwarna; hover = terisi warnanya dengan bayangan tegas */
+.contact-dl { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 4px; }
+.contact .btn-dl { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.contact .btn-dl:hover { background: var(--c); border-color: var(--ink); color: var(--ink); transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+.contact .btn-dl:active { transform: none; box-shadow: 0 0 0 var(--ink); }
 .contact-list { flex: 1.2 1 460px; min-width: 0; border-top: 2px solid var(--ink); }
 .contact-list li { position: relative; border-bottom: 2px solid var(--ink); }
 .c-row { display: grid; grid-template-columns: 26px 96px minmax(0, 1fr) 22px; align-items: center; gap: 14px; padding: 20px 66px 20px 14px; min-width: 0; transition: background .25s, color .25s; }
@@ -831,6 +916,7 @@ a.c-row:hover .c-go { transform: translate(3px, -3px); }
 @media (max-width: 620px) {
   body { font-size: 16px; }
   .hero { padding: 56px 0 180px; }
+  .hero-cta .btn, .contact-dl .btn { flex: 1 1 auto; }   /* tombol melebar memenuhi baris */
   .panel { padding: 22px 16px 20px; }
   .projects { grid-template-columns: 1fr; }
   .card.featured { grid-column: auto; grid-row: auto; }
@@ -855,6 +941,7 @@ a.c-row:hover .c-go { transform: translate(3px, -3px); }
 @keyframes sheen { from { transform: translateX(-140%) skewX(-16deg); } to { transform: translateX(360%) skewX(-16deg); } }
 @keyframes fade { from { opacity: 0; } }
 @keyframes wavesUp { from { opacity: 0; transform: scaleY(0); } to { opacity: 1; transform: none; } }
+@keyframes drift { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(6%, 5%) scale(1.08); } 100% { transform: translate(-5%, 9%) scale(.95); } }
 @keyframes phase { to { transform: translateX(-240px); } }
 @keyframes marquee { to { transform: translateX(-50%); } }
 @keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--run) 70%, transparent); } 70%, 100% { box-shadow: 0 0 0 9px color-mix(in srgb, var(--run) 0%, transparent); } }

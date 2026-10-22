@@ -6,6 +6,10 @@ _file-asli/
 # cadangan kode versi lama
 _versi-lama/
 _versi-sebelum-redesign/
+_versi-sebelum-warna/
+
+# bahan profil LinkedIn (teks + banner), bukan bagian website
+_linkedin/
 
 # file sampah Windows
 Thumbs.db

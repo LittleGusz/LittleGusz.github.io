@@ -6,10 +6,11 @@ Website satu halaman, HTML/CSS/JS murni. Nggak perlu install apa pun, nggak perl
 Dobel-klik `index.html`. Jalan langsung di browser, tanpa server.
 
 ### Dibuka dari flashdisk / tanpa internet
-Semua yang dipakai website ada di folder ini: halaman, tampilan, data, font, foto, video, dan CV. Tidak ada yang diambil
-dari internet, jadi website tampil lengkap walau laptopnya offline.
+Semua yang dipakai website ada di folder ini: halaman, tampilan, data, font, foto, video, CV, dan PDF portofolio. Tidak ada
+yang diambil dari internet, jadi website tampil lengkap walau laptopnya offline.
 - Di laptop/PC lain (Windows, Mac, Linux): colok flashdisk, buka folder ini, dobel-klik `index.html`.
-- Kalau mau dicopy ke tempat lain, yang wajib ikut: `index.html`, `css/`, `js/`, `assets/` (±86 MB). Susunan foldernya jangan diubah.
+- Kalau mau dicopy ke tempat lain, yang wajib ikut: `index.html`, `css/`, `js/`, `assets/` (±94 MB). Susunan foldernya jangan diubah.
+  Folder `pdf-portofolio/` cuma perlu ikut kalau di tempat baru mau membuat ulang PDF portofolio.
 - Yang tetap butuh internet cuma link keluar (LinkedIn) dan kirim email.
 - Di HP/tablet, membuka website langsung dari flashdisk umumnya tidak bisa (browser HP tidak memuat folder website lokal).
   Di HP, buka versi online-nya: https://littlegusz.github.io/ (lihat bagian "Website online" di bawah).
@@ -56,6 +57,30 @@ dari internet, jadi website tampil lengkap walau laptopnya offline.
 ### CV
 Taruh PDF di `assets/cv/`, lalu isi `cv: "assets/cv/NamaFile.pdf"`. Kalau `cv: ""`, tombol Download CV otomatis hilang.
 
+### Portofolio (PDF)
+Di hero dan di section Kontak ada dua tombol: **Download CV** (biru) dan **Download Portofolio** (hijau).
+File portofolionya diatur di `portfolio` pada `js/data.js`, dan boleh beda per bahasa:
+```js
+portfolio: { id: "assets/portfolio/Portofolio-....pdf", en: "assets/portfolio/Portfolio-...-EN.pdf" }
+```
+Pengunjung yang memilih EN otomatis mendapat versi Inggris. Kalau `portfolio: ""`, tombolnya hilang.
+
+PDF-nya **dibuat otomatis dari isi `data.js`** (foto, keterangan, keahlian, pengalaman), dengan warna dan font yang sama
+dengan website:
+1. Edit `js/data.js` seperti biasa (tambah project, ganti foto, dll.).
+2. Dobel-klik `pdf-portofolio/buat-pdf.cmd`. Tunggu ±10 detik sampai muncul "Selesai".
+3. Hasilnya menimpa dua file di `assets/portfolio/` (Indonesia dan Inggris), lalu upload seperti biasa (`git push`).
+
+Catatan:
+- Butuh Microsoft Edge (bawaan Windows 10/11). Tidak butuh internet.
+- Foto otomatis diperkecil sesuai ukurannya di kertas (PDF ±3,7 MB) dan data EXIF-nya dibuang.
+- Isinya: sampul, tentang & keahlian & daftar project, satu halaman per project (semua foto tampil utuh, video diwakili
+  posternya dengan tanda "Video"), lalu pengalaman, sertifikasi, dan kontak. Project yang belum punya foto masuk "Project lainnya".
+- Nama file hasil diatur di baris atas `buat-pdf.cmd`. Kalau diganti, samakan path `portfolio` di `data.js`.
+- Tanpa Edge: buka `pdf-portofolio/index.html` di Chrome/Edge, tekan Ctrl+P, pilih "Simpan sebagai PDF", margin "Tidak ada",
+  centang "Grafis latar belakang" (fotonya tidak diperkecil, jadi file-nya lebih besar). Versi Inggris: tambahkan `?lang=en` di alamatnya.
+- Punya file portofolio sendiri? Taruh di `assets/portfolio/` lalu tulis path-nya di `portfolio`.
+
 ### Menyembunyikan section
 Kosongkan array-nya, mis. `certifications: []` → section Sertifikasi + link navbar-nya hilang sendiri.
 Kontak yang dikosongkan (`""`) juga disembunyikan.
@@ -87,6 +112,10 @@ Buka `css/style.css`, bagian paling atas (`:root`). Warnanya diambil dari kabel 
 - `--steel` abu terang: latar section Tentang
 - `--blueprint` biru tua: latar section Project
 
+Supaya lebih berwarna, tiap section punya cahaya warna sendiri (gradasi `radial-gradient` di `background` section-nya,
+mis. `.skills-sec`, `.exp-sec`), hero punya aurora R-S-T (`.aurora`), dan kata terakhir judul section memakai warna
+section-nya (`--tc`). Angka persen di `color-mix(... 15%, ...)` = kekuatan cahayanya; perbesar kalau mau lebih terang.
+
 ## Panel kontrol di hero
 Pintu panel di bagian atas bisa dipencet pengunjung:
 - **START** (tahan lalu lepas): motor M1 nyala dan tetap jalan lewat kontak self-holding, ladder diagram ikut "dialiri arus", kipas motor berputar.
@@ -97,9 +126,12 @@ Pintu panel di bagian atas bisa dipencet pengunjung:
 Pemilih bahasa ID/EN di navbar berbentuk selector switch; klik ID, EN, atau knop-nya.
 
 ## Animasi
-- Hero: nama naik per kata, pintu panel mengayun masuk, gelombang sinus 3 fasa (R-S-T) berjalan di bawahnya, peran bergantian dengan efek gulung.
+- Hero: nama naik per kata, pintu panel mengayun masuk, gelombang sinus 3 fasa (R-S-T) berjalan di bawahnya, peran bergantian
+  dengan efek gulung, cahaya aurora bergeser pelan, dan grid blueprint menyala warna-warni di sekitar kursor.
 - Saat di-scroll: judul, kartu, dan LED skill muncul berurutan; kabel timeline dialiri arus; progress bar 3 warna di navbar.
-- Hover: kartu project naik dengan garis putus-putus berjalan di tepinya; tombol dan baris kontak ikut bereaksi.
+- Hover: kartu project naik dengan garis putus-putus berjalan di tepinya; kartu skill dan sertifikasi diberi sorotan warna
+  yang mengikuti kursor; tombol dan baris kontak ikut bereaksi.
+- Scrollbar berwarna 3 fasa (Chrome/Edge/Safari).
 
 Semua animasi otomatis mati kalau pengunjung mengaktifkan *reduce motion*.
 
@@ -135,10 +167,16 @@ assets/img/           favicon, placeholder foto & project
 assets/img/projects/  foto & video project, satu subfolder per project
 assets/fonts/         file font Archivo & Martian Mono + teks lisensinya (OFL)
 assets/cv/            file CV (PDF)
+assets/portfolio/     PDF portofolio (Indonesia & Inggris), hasil pdf-portofolio/buat-pdf.cmd
+pdf-portofolio/       pembuat PDF portofolio: dobel-klik buat-pdf.cmd. Halaman cetaknya (index.html, cetak.css,
+                      cetak.js) mengambil isi dari js/data.js; nggak perlu diedit
 .gitignore            daftar yang tidak ikut di-upload ke GitHub (folder berawalan _)
 .nojekyll             file kosong; penanda supaya GitHub Pages menyajikan folder ini apa adanya
 _file-asli/           foto & video asli dari HP, per project, sebelum dipotong/dikompres untuk web. Tidak dipakai website dan
                       JANGAN ikut di-upload: ukurannya besar (±360 MB) dan fotonya masih menyimpan lokasi GPS tempat foto diambil
+_linkedin/            isi profil LinkedIn siap copy-paste (profil-linkedin.md) + banner 1584x396 (banner-linkedin.png,
+                      sumbernya banner.html). Tidak di-upload
+_versi-sebelum-warna/ cadangan kode sebelum website dibuat lebih berwarna + tombol Download Portofolio
 _versi-sebelum-redesign/  cadangan kode sebelum redesign "Panel Hidup"
 _versi-lama/          cadangan versi yang lebih lama
 ```

@@ -14,6 +14,7 @@ window.I18N = {
 
     btn_projects: "Lihat project",
     btn_cv: "Download CV",
+    btn_portfolio: "Download Portofolio",
     panel_hint: "Tekan START. Lepas tombolnya, motor tetap jalan karena kontak self-holding M1. Tekan STOP untuk mematikan.",
     ladder_alt: "Ladder diagram PLC rangkaian start-stop dengan self-holding, mengikuti tombol di panel",
     role_label: "PERAN",
@@ -83,6 +84,7 @@ window.I18N = {
 
     btn_projects: "See projects",
     btn_cv: "Download CV",
+    btn_portfolio: "Download Portfolio",
     panel_hint: "Press START. Let go and the motor keeps running through the M1 seal-in contact. Press STOP to shut it down.",
     ladder_alt: "PLC ladder diagram of a start-stop circuit with seal-in, following the panel buttons",
     role_label: "ROLE",
