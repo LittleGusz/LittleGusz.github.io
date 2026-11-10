@@ -118,54 +118,34 @@
   function unobserveIn(box) { if (io) $$("[data-rv]", box).forEach(function (n) { io.unobserve(n); }); }
 
   function onReveal(key, node) {
-    if (key === "about-plate") $$(".scr", node).forEach(function (n, i) { scramble(n, i * 160); });
-    else if (key.indexOf("cert-card-") === 0) $$(".scr", node).forEach(function (n) { scramble(n, 0); });
+    if (key === "about-plate") $$(".num", node).forEach(function (n, i) { countUp(n, i * 120); });
   }
 
   /* ================================================================
-     ANGKA "DIKOCOK" — seperti pengumuman harga waktu peluncuran HP:
-     digit diacak cepat, lalu dikunci satu per satu dari kiri ke kanan.
+     ANGKA MENGHITUNG NAIK — angka statistik naik dari 0 ke nilainya
+     sekali saat pertama terlihat. Akhiran seperti "+" ikut di belakang.
      ================================================================ */
-  function isDigit(c) { return c >= "0" && c <= "9"; }
-  function scramble(node, delay) {
+  function countUp(node, delay) {
     var target = node.getAttribute("data-value") || node.textContent;
-    var chars = target.split("");
-    var digits = chars.filter(isDigit).length;
-    if (!digits || REDUCE) return;
-    var LOCK = 900, STEP = 170, TICK = 55;
-    var t0 = performance.now() + (delay || 0), last = 0;
-    node.classList.remove("landed");
-    node.classList.add("rolling");
-    function frame(now) {
-      if (now - last >= TICK) {
-        last = now;
-        var age = now - t0, di = 0;
-        node.textContent = chars.map(function (c) {
-          if (!isDigit(c)) return c;
-          var lock = LOCK + STEP * di++;
-          return age >= lock ? c : String(Math.floor(Math.random() * 10));
-        }).join("");
-        if (age >= LOCK + STEP * (digits - 1)) {
-          node.textContent = target;
-          node.classList.remove("rolling");
-          node.classList.add("landed");
-          return;
-        }
-      }
-      requestAnimationFrame(frame);
-    }
-    requestAnimationFrame(frame);
+    var m = /^(\D*)(\d+)(.*)$/.exec(target);
+    if (!m || REDUCE) { node.textContent = target; return; }
+    var end = parseInt(m[2], 10), DUR = 1100, t0 = 0;
+    node.textContent = m[1] + "0" + m[3];
+    setTimeout(function () {
+      requestAnimationFrame(function frame(now) {
+        if (!t0) t0 = now;
+        var k = Math.min((now - t0) / DUR, 1), ease = 1 - Math.pow(1 - k, 3);
+        node.textContent = m[1] + Math.round(end * ease) + m[3];
+        if (k < 1) requestAnimationFrame(frame);
+      });
+    }, delay || 0);
   }
 
-  // [[teks]] di data.js = kata kunci dengan stabilo warna (kuning, biru, hijau bergantian)
+  // [[teks]] di data.js = kata kunci yang ditebalkan
   function richText(node, text) {
-    var n = 0;
     String(text || "").split(/\[\[(.+?)\]\]/).forEach(function (part, i) {
       if (!part) return;
-      if (i % 2) {
-        node.appendChild(el("mark", { class: "hl hl-" + (n % 3), style: "transition-delay:" + (0.35 + n * 0.25).toFixed(2) + "s", text: part }));
-        n++;
-      } else node.appendChild(document.createTextNode(part));
+      node.appendChild(i % 2 ? el("strong", { class: "kw", text: part }) : document.createTextNode(part));
     });
     return node;
   }
@@ -175,21 +155,11 @@
      ================================================================ */
   function applyStaticI18n() {
     document.documentElement.lang = lang;
-    $$("[data-i18n]").forEach(function (n) {
-      if (n.classList.contains("sec-title")) accentLast(n, ui(n.dataset.i18n));
-      else n.textContent = ui(n.dataset.i18n);
-    });
+    $$("[data-i18n]").forEach(function (n) { n.textContent = ui(n.dataset.i18n); });
     $$("[data-i18n-aria]").forEach(function (n) { n.setAttribute("aria-label", ui(n.dataset.i18nAria)); });
     $$(".selector button[data-lang]").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
     $("#selector").dataset.pos = lang;
   }
-  // kata terakhir judul section diberi warna section-nya, seperti nama di hero (judul satu kata: seluruhnya)
-  function accentLast(node, text) {
-    var i = text.lastIndexOf(" ");
-    node.textContent = text.slice(0, i + 1);
-    node.appendChild(el("span", { class: "tw", text: text.slice(i + 1) }));
-  }
-
   /* ================================================================
      HERO
      ================================================================ */
@@ -200,7 +170,7 @@
     renderName(name);
     $("#brand-tag").textContent = initials;
     $("#brand-name").textContent = name;
-    colorTitle($("#hero-title"), t(p.title));
+    $("#hero-title").textContent = t(p.title);
     var lead = $("#hero-tagline"); lead.textContent = "";
     richText(lead, t(p.tagline));
     document.title = name + " — " + t(p.title);
@@ -236,17 +206,6 @@
     });
   }
 
-  // "Mechanical" biru, "Electrical" kuning — ikut warna kategori project
-  var TITLE_WORDS = /(mechanical|mekanikal|mekanik|electrical|elektrikal|elektrik)/i;
-  function colorTitle(node, text) {
-    node.textContent = "";
-    String(text || "").split(TITLE_WORDS).forEach(function (part, i) {
-      if (!part) return;
-      if (i % 2) node.appendChild(el("span", { class: /^me/i.test(part) ? "t-mech" : "t-elec", text: part }));
-      else node.appendChild(document.createTextNode(part));
-    });
-  }
-
   // peran bergantian dengan efek gulung; reduce motion = daftar statis
   var roll = { n: 0, i: 0, timer: 0, back: 0 };
   function renderRoles(roles) {
@@ -259,13 +218,13 @@
     var still = REDUCE || list.length < 2;
     box.classList.toggle("static", still);
     list.forEach(function (r, i) {
-      track.appendChild(el("span", { class: "roll-item c" + (i % 4) }, r,
+      track.appendChild(el("span", { class: "roll-item" }, r,
         i < list.length - 1 ? el("span", { class: "sr-only", text: ", " }) : null));
     });
     roll.n = list.length; roll.i = 0;
     setRoll(0, false);
     if (still) return;
-    track.appendChild(el("span", { class: "roll-item c0", "aria-hidden": "true", text: list[0] }));   // duplikat untuk loop mulus
+    track.appendChild(el("span", { class: "roll-item", "aria-hidden": "true", text: list[0] }));   // duplikat untuk loop mulus
     roll.timer = setInterval(function () {
       roll.i += 1;
       setRoll(roll.i, true);
@@ -277,36 +236,6 @@
     track.classList.toggle("no-anim", !animate);
     track.style.transform = "translateY(" + (-1.35 * i) + "em)";
     if (!animate) void track.offsetHeight;                 // paksa reflow supaya lompatan balik tidak teranimasi
-    $("#role-led").className = "role-led c" + ((i % roll.n) % 4);
-  }
-
-  /* ================================================================
-     PITA BERJALAN (tools & kata kunci)
-     ================================================================ */
-  function renderTicker() {
-    var tk = D.ticker || {};
-    var front = has(tk.front) ? tk.front : (D.skills || [])
-      .filter(function (g) { return g.icon !== "users"; })
-      .reduce(function (a, g) { return a.concat((g.items || []).map(function (it) { return it.name; })); }, []);
-    front = front.map(t).filter(Boolean);
-    var back = (tk.back || []).map(t).filter(Boolean);
-    fillTrack($("#tk-front"), front, "bolt", false);
-    fillTrack($("#tk-back"), back, "cross", true);
-    $("#tk-back-band").hidden = !back.length;
-    $("#ticker").hidden = !front.length && !back.length;
-  }
-  function fillTrack(track, words, ic, decorOnly) {
-    track.textContent = "";
-    if (!words.length) return;
-    if (!decorOnly) track.appendChild(el("span", { class: "sr-only", text: words.join(", ") }));
-    // satu set harus lebih lebar dari layar supaya loop-nya mulus
-    var set = words.slice();
-    while (set.join("").length * 13 + set.length * 70 < 2600) set = set.concat(words);
-    for (var half = 0; half < 2; half++) {
-      var g = el("div", { class: "tk-set", "aria-hidden": "true" });
-      set.forEach(function (w) { g.appendChild(el("span", { class: "tk-item" }, w, icon(ic))); });
-      track.appendChild(g);
-    }
   }
 
   /* ================================================================
@@ -464,15 +393,15 @@
     $("#rp-name").textContent = p.name || "";
     $("#rp-type").textContent = t(p.title);
     var g = $("#rp-grid"); g.textContent = "";
-    // angka statistik: besar & berwarna, "dikocok" saat pelat pertama kali muncul
-    (p.stats || []).forEach(function (s, i) {
+    // angka statistik: besar, menghitung naik saat pertama kali terlihat
+    (p.stats || []).forEach(function (s) {
       var val = String(s.value == null ? "" : s.value) + (s.suffix || "");
       if (!val) return;
-      g.appendChild(el("div", { class: "rp-cell rp-stat c" + (i % 4) },
+      g.appendChild(el("div", { class: "rp-cell rp-stat" },
         el("dt", { text: t(s.label) }),
         el("dd", { class: "rp-num" },
           el("span", { class: "sr-only", text: val }),
-          el("span", { class: "scr", "aria-hidden": "true", "data-value": val, text: val }))));
+          el("span", { class: "num", "aria-hidden": "true", "data-value": val, text: val }))));
     });
     function cell(label, value, cls) {
       if (!value) return;
@@ -489,8 +418,6 @@
      SKILLS
      ================================================================ */
   var LEVELS = { advanced: 3, intermediate: 2, basic: 1 };
-  var GROUP_TONE = { code: "run", bolt: "volt", gear: "cad", users: "orange" };   // warna grup ikut ikonnya
-  var TONES = ["run", "volt", "cad", "orange"];
   function meter(n, delay) {
     var m = el("span", { class: "meter", "aria-hidden": "true" });
     for (var i = 1; i <= 3; i++) {
@@ -504,7 +431,6 @@
 
     var grid = $("#skills-grid"); grid.textContent = "";
     (D.skills || []).forEach(function (g, gi) {
-      var tone = GROUP_TONE[g.icon] || TONES[gi % 4];
       var list = el("ul", { class: "skill-list" });
       (g.items || []).forEach(function (it, ii) {
         var lv = it.level || "basic";
@@ -514,7 +440,7 @@
           meter(LEVELS[lv] || 1, 300 + gi * 110 + ii * 70)));
       });
       grid.appendChild(el("div", { class: "rv-c", style: "transition-delay:" + gi * 110 + "ms" },
-        el("section", { class: "skill-card spot sk-" + tone },
+        el("section", { class: "skill-card" },
           el("div", { class: "skill-head" }, el("span", { class: "skill-ic" }, icon(g.icon || "gear")), el("h3", { text: t(g.group) })),
           list)));
     });
@@ -542,10 +468,11 @@
     var grid = $("#projects-grid"); grid.textContent = "";
     if (cardIO) cardIO.disconnect();
     slideOrder = 0;
-    projects.forEach(function (p) {
+    projects.forEach(function (p, i) {
       var tags = el("ul", { class: "tags" });
       (p.tools || []).forEach(function (x) { tags.appendChild(el("li", { text: t(x) })); });
-      grid.appendChild(el("article", { class: "card cat-" + p.category, "data-cat": p.category },
+      // --r: urutan muncul saat section project pertama kali terlihat (kartu muncul satu per satu)
+      grid.appendChild(el("article", { class: "card cat-" + p.category, "data-cat": p.category, style: "--r:" + Math.min(i, 8) },
         cardShot(p),
         el("div", { class: "card-body" },
           el("div", { class: "card-meta" },
@@ -664,6 +591,13 @@
     openProject = p; lastFocus = from || document.activeElement;
     fillModal(p);
     var m = $("#modal");
+    // detail project "keluar" dari kartunya: mulai sedikit bergeser ke arah kartu yang diklik
+    var card = from && from.closest && from.closest(".card"), dlg = $(".modal-dialog", m);
+    if (card) {
+      var r = card.getBoundingClientRect();
+      dlg.style.setProperty("--dx", ((r.left + r.width / 2 - window.innerWidth / 2) * 0.35).toFixed(0) + "px");
+      dlg.style.setProperty("--dy", ((r.top + r.height / 2 - window.innerHeight / 2) * 0.35).toFixed(0) + "px");
+    } else { dlg.style.setProperty("--dx", "0px"); dlg.style.setProperty("--dy", "24px"); }
     m.hidden = false;
     document.body.classList.add("no-scroll");
     requestAnimationFrame(function () { m.classList.add("open"); });
@@ -895,36 +829,20 @@
     toggleSection("experience", has(D.experience));
   }
 
-  // stempel bulat dengan teks berputar
-  function sealRing(text, i) {
-    var id = "seal-path-" + i;
-    var svg = sv("svg", { viewBox: "0 0 120 120" });
-    sv("path", { id: id, d: "M60 60m-47 0a47 47 0 1 1 94 0a47 47 0 1 1-94 0", fill: "none" }, sv("defs", {}, svg));
-    var tp = sv("textPath", { href: "#" + id, textLength: "292", lengthAdjust: "spacing" }, sv("text", { class: "seal-text" }, svg));
-    tp.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + id);
-    tp.textContent = text;
-    var ring = el("div", { class: "seal-ring" });
-    ring.appendChild(svg);
-    return el("div", { class: "seal", "aria-hidden": "true" }, ring, el("div", { class: "seal-core" }, icon("medal")));
-  }
   function renderCerts() {
     var ul = $("#certs-grid");
     unobserveIn(ul); ul.textContent = "";
     (D.certifications || []).forEach(function (c, i) {
       var name = t(c.name), by = t(c.issuer), yr = t(c.year);
-      var ring = [by, name, yr].filter(Boolean).join(" · ");
-      if (ring.length > 30) ring = [by, yr].filter(Boolean).join(" · ") || name.slice(0, 28);
-      ring = (ring + " · ").toUpperCase();
-      if (ring.length < 16) ring += ring;
       var body = [
-        sealRing(ring, i),
-        el("div", { class: "cert-body" }, by ? el("span", { class: "cert-by", text: by }) : null, el("h3", { class: "cert-name", text: name })),
-        yr ? el("span", { class: "cert-year" }, el("span", { class: "sr-only", text: yr }), el("span", { class: "scr", "aria-hidden": "true", "data-value": yr, text: yr })) : null,
+        el("span", { class: "cert-ic", "aria-hidden": "true" }, icon("medal")),
+        el("div", { class: "cert-body" }, el("h3", { class: "cert-name", text: name }), by ? el("span", { class: "cert-by", text: by }) : null),
+        yr ? el("span", { class: "cert-year", text: yr }) : null,
         c.url ? icon("out") : null
       ];
       var card = c.url
-        ? el("a", { class: "cert spot", href: c.url, target: "_blank", rel: "noopener", title: ui("cert_view") }, body)
-        : el("div", { class: "cert spot" }, body);
+        ? el("a", { class: "cert", href: c.url, target: "_blank", rel: "noopener", title: ui("cert_view") }, body)
+        : el("div", { class: "cert" }, body);
       ul.appendChild(reveal(el("li", { class: "rv" }, card), "cert-card-" + i));
     });
     toggleSection("certifications", has(D.certifications));
@@ -997,20 +915,20 @@
       $$("main section[id]").forEach(function (s) { spy.observe(s); });
     }
 
-    // progress bar: CSS scroll-timeline kalau browser mendukung, selain itu lewat JS
-    var cssProgress = window.CSS && CSS.supports && CSS.supports("animation-timeline: scroll()");
-    if (!cssProgress && !REDUCE) {
-      var bar = $("#progress"), ticking = false;
-      var paint = function () {
-        ticking = false;
-        var max = document.documentElement.scrollHeight - window.innerHeight;
-        var pct = max > 0 ? Math.min(100, Math.max(0, window.scrollY / max * 100)) : 0;
-        bar.style.clipPath = "inset(0 " + (100 - pct).toFixed(2) + "% 0 0)";
-      };
-      window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }, { passive: true });
-      window.addEventListener("resize", paint);
-      paint();
-    }
+    // saat di-scroll: navbar mengecil dan latarnya lebih pekat; garis timeline pengalaman terisi
+    // sampai item yang sedang ada di tengah layar
+    var tl = $("#timeline-wrap"), fill = $("#wire-fill"), ticking = false;
+    var paint = function () {
+      ticking = false;
+      nav.classList.toggle("scrolled", window.scrollY > 12);
+      if (!tl || REDUCE) return;
+      var r = tl.getBoundingClientRect();
+      var k = r.height > 0 ? (window.innerHeight * 0.6 - r.top) / r.height : 0;
+      fill.style.transform = "scaleY(" + Math.min(1, Math.max(0, k)).toFixed(3) + ")";
+    };
+    window.addEventListener("scroll", function () { if (!ticking) { ticking = true; requestAnimationFrame(paint); } }, { passive: true });
+    window.addEventListener("resize", paint);
+    paint();
 
     function setLang(l) {
       if (l === lang) return;
@@ -1023,42 +941,11 @@
   }
 
   /* ================================================================
-     SOROTAN WARNA — grid hero menyala di sekitar kursor, kartu (.spot)
-     diberi cahaya warna kartunya di titik kursor. Hanya untuk mouse/
-     trackpad; mati saat reduce motion.
-     ================================================================ */
-  function bindGlow() {
-    if (REDUCE || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
-    var hero = $("#home"), spot = $("#hero-spot"), x = 0, y = 0, raf = 0;
-    hero.addEventListener("pointermove", function (e) {
-      var r = hero.getBoundingClientRect();
-      x = e.clientX - r.left; y = e.clientY - r.top;
-      if (raf) return;
-      raf = requestAnimationFrame(function () {
-        raf = 0;
-        spot.style.setProperty("--mx", x + "px");
-        spot.style.setProperty("--my", y + "px");
-        spot.classList.add("on");
-      });
-    });
-    hero.addEventListener("pointerleave", function () { spot.classList.remove("on"); });
-
-    document.addEventListener("pointermove", function (e) {
-      var c = e.target.closest && e.target.closest(".spot");
-      if (!c) return;
-      var r = c.getBoundingClientRect();
-      c.style.setProperty("--px", (e.clientX - r.left) + "px");
-      c.style.setProperty("--py", (e.clientY - r.top) + "px");
-    }, { passive: true });
-  }
-
-  /* ================================================================
      INIT
      ================================================================ */
   function renderAll() {
     applyStaticI18n();
     renderHero();
-    renderTicker();
     renderAbout();
     renderSkills();
     renderProjects();
@@ -1074,6 +961,5 @@
   $$("[data-rv]").forEach(function (n) { reveal(n); });
   bindNav();
   bindModal();
-  bindGlow();
   initPanel();
 })();

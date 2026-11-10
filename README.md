@@ -65,8 +65,8 @@ portfolio: { id: "assets/portfolio/Portofolio-....pdf", en: "assets/portfolio/Po
 ```
 Pengunjung yang memilih EN otomatis mendapat versi Inggris. Kalau `portfolio: ""`, tombolnya hilang.
 
-PDF-nya **dibuat otomatis dari isi `data.js`** (foto, keterangan, keahlian, pengalaman), dengan warna dan font yang sama
-dengan website:
+PDF-nya **dibuat otomatis dari isi `data.js`** (foto, keterangan, keahlian, pengalaman). Tampilannya punya gaya sendiri
+(`pdf-portofolio/cetak.css`, halaman putih supaya enak dicetak), jadi tidak ikut berubah kalau tampilan website diganti:
 1. Edit `js/data.js` seperti biasa (tambah project, ganti foto, dll.).
 2. Dobel-klik `pdf-portofolio/buat-pdf.cmd`. Tunggu ±10 detik sampai muncul "Selesai".
 3. Hasilnya menimpa dua file di `assets/portfolio/` (Indonesia dan Inggris), lalu upload seperti biasa (`git push`).
@@ -86,35 +86,30 @@ Kosongkan array-nya, mis. `certifications: []` → section Sertifikasi + link na
 Kontak yang dikosongkan (`""`) juga disembunyikan.
 
 ### Level skill
-`"advanced"` (3 LED), `"intermediate"` (2 LED), `"basic"` (1 LED).
-Warna kartu grup skill ikut ikonnya: `code` hijau, `bolt` kuning, `gear` biru, `users` oranye.
+`"advanced"` (3 bar), `"intermediate"` (2 bar), `"basic"` (1 bar). Bar-nya menyala berurutan waktu section Keahlian muncul.
 
-### Pita berjalan
-Isi pita kuning dan biru di bawah hero ada di `ticker` (`front` dan `back`).
-Kalau `front: []`, isinya otomatis diambil dari daftar skill. Kalau `back: []`, pita biru disembunyikan.
+### Kata kunci tebal
+Di teks `about` dan `tagline`, bungkus kata kunci dengan `[[...]]`, mis. `"bidang [[otomasi industri]]"`. Kata kuncinya ditebalkan.
 
-### Stabilo kata kunci
-Di teks `about` dan `tagline`, bungkus kata kunci dengan `[[...]]`, mis. `"bidang [[otomasi industri]]"`.
-Warnanya bergantian kuning, biru, hijau dan tersapu masuk waktu paragrafnya muncul.
-
-### Angka "dikocok"
-Angka di `stats` (nameplate di section Tentang) dan tahun sertifikasi diacak dulu sebelum berhenti di nilai aslinya, seperti pengumuman harga HP baru.
+### Angka yang menghitung naik
+Angka di `stats` (kotak fakta di section Tentang) menghitung naik dari 0 waktu pertama kali terlihat. Akhiran seperti `+` tetap ikut.
 Cukup isi angkanya di `data.js`; animasinya otomatis.
 
-## Ganti warna
-Buka `css/style.css`, bagian paling atas (`:root`). Warnanya diambil dari kabel 3 fasa dan sinyal panel listrik:
-- `--stop` merah (fasa R): tombol/lampu STOP, sertifikasi
-- `--volt` kuning (fasa S): electrical, tombol utama, blok kontak
-- `--cad` biru (fasa T): mechanical / CAD
-- `--run` hijau: lampu RUN, PLC, pengalaman kerja
-- `--orange`: pendidikan, soft skill
-- `--ink` navy baja: warna dasar halaman
-- `--steel` abu terang: latar section Tentang
-- `--blueprint` biru tua: latar section Project
+### Pita berjalan
+Sejak tampilan dark mode, pita berjalan di bawah hero tidak ditampilkan lagi. Data `ticker` di `data.js` dibiarkan, tidak dipakai.
 
-Supaya lebih berwarna, tiap section punya cahaya warna sendiri (gradasi `radial-gradient` di `background` section-nya,
-mis. `.skills-sec`, `.exp-sec`), hero punya aurora R-S-T (`.aurora`), dan kata terakhir judul section memakai warna
-section-nya (`--tc`). Angka persen di `color-mix(... 15%, ...)` = kekuatan cahayanya; perbesar kalau mau lebih terang.
+## Ganti warna
+Tampilannya dark mode: satu latar gelap, satu warna aksen, satu font (Archivo, lebar normal). Warnanya diatur di
+`css/style.css`, bagian paling atas (`:root`):
+- `--bg`, `--bg-2`: latar halaman (section selang-seling pakai `--bg-2`)
+- `--surface`, `--surface-2`: latar kartu
+- `--line`, `--line-2`: garis tipis dan batas tombol
+- `--text`, `--muted`, `--dim`: teks utama, teks kedua, keterangan kecil
+- `--accent` kuning: tombol utama, nama di hero, angka statistik, garis timeline, kategori Electrical
+- `--mech` biru: titik kategori Mechanical
+- `--run` hijau dan `--stop` merah: cuma untuk lampu dan tombol panel kontrol di hero, plus titik status "terbuka untuk project"
+
+Mau ganti warna aksen? Cukup ubah `--accent` (dan `--accent-ink` kalau teks di atas tombol utama jadi kurang terbaca).
 
 ## Panel kontrol di hero
 Pintu panel di bagian atas bisa dipencet pengunjung:
@@ -123,15 +118,17 @@ Pintu panel di bagian atas bisa dipencet pengunjung:
 - Saat halaman dibuka ada lamp test singkat, lalu panel menyalakan motor sendiri sekali.
 - Tombol bisa dipakai lewat keyboard (Tab lalu Spasi/Enter).
 
-Pemilih bahasa ID/EN di navbar berbentuk selector switch; klik ID, EN, atau knop-nya.
+Pemilih bahasa ID/EN di navbar berbentuk sakelar; klik ID, EN, atau sakelarnya.
 
 ## Animasi
-- Hero: nama naik per kata, pintu panel mengayun masuk, gelombang sinus 3 fasa (R-S-T) berjalan di bawahnya, peran bergantian
-  dengan efek gulung, cahaya aurora bergeser pelan, dan grid blueprint menyala warna-warni di sekitar kursor.
-- Saat di-scroll: judul, kartu, dan LED skill muncul berurutan; kabel timeline dialiri arus; progress bar 3 warna di navbar.
-- Hover: kartu project naik dengan garis putus-putus berjalan di tepinya; kartu skill dan sertifikasi diberi sorotan warna
-  yang mengikuti kursor; tombol dan baris kontak ikut bereaksi.
-- Scrollbar berwarna 3 fasa (Chrome/Edge/Safari).
+- Hero: nama naik per kata, lalu subjudul, teks, dan tombol muncul berurutan; panel kontrol muncul sedikit belakangan;
+  peran bergantian dengan efek gulung.
+- Navbar: setelah halaman di-scroll, navbar mengecil dan latarnya lebih pekat; garis kuning di bawah link section yang sedang dibaca.
+- Saat di-scroll: judul dan isi tiap section muncul halus (naik + memudar masuk); kartu project muncul satu per satu;
+  bar level skill menyala berurutan; angka statistik menghitung naik; garis timeline pengalaman terisi kuning mengikuti scroll.
+- Hover: kartu project naik sedikit dan fotonya zoom pelan; kartu skill dan sertifikasi naik sedikit; tombol, baris kontak,
+  dan panah ikut bergerak.
+- Detail project terbuka mulus dari arah kartu yang diklik.
 
 Semua animasi otomatis mati kalau pengunjung mengaktifkan *reduce motion*.
 
@@ -165,7 +162,8 @@ js/i18n.js            teks UI (navbar, judul section, tombol) ID & EN
 js/main.js            render data + interaksi + animasi
 assets/img/           favicon, placeholder foto & project
 assets/img/projects/  foto & video project, satu subfolder per project
-assets/fonts/         file font Archivo & Martian Mono + teks lisensinya (OFL)
+assets/fonts/         file font Archivo & Martian Mono + teks lisensinya (OFL). Website cuma pakai Archivo;
+                      Martian Mono masih dipakai PDF portofolio
 assets/cv/            file CV (PDF)
 assets/portfolio/     PDF portofolio (Indonesia & Inggris), hasil pdf-portofolio/buat-pdf.cmd
 pdf-portofolio/       pembuat PDF portofolio: dobel-klik buat-pdf.cmd. Halaman cetaknya (index.html, cetak.css,
@@ -176,6 +174,7 @@ _file-asli/           foto & video asli dari HP, per project, sebelum dipotong/d
                       JANGAN ikut di-upload: ukurannya besar (±360 MB) dan fotonya masih menyimpan lokasi GPS tempat foto diambil
 _linkedin/            isi profil LinkedIn siap copy-paste (profil-linkedin.md) + banner 1584x396 (banner-linkedin.png,
                       sumbernya banner.html). Tidak di-upload
+_versi-sebelum-dark-mode/ cadangan kode sebelum tampilan dark mode (cara kembali: CARA-KEMBALI.txt di dalamnya)
 _versi-sebelum-warna/ cadangan kode sebelum website dibuat lebih berwarna + tombol Download Portofolio
 _versi-sebelum-redesign/  cadangan kode sebelum redesign "Panel Hidup"
 _versi-lama/          cadangan versi yang lebih lama

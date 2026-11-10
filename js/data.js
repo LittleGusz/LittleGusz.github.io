@@ -10,7 +10,7 @@
    • Gambar: taruh di assets/img/ atau assets/img/projects/, lalu tulis
      path-nya, mis. "assets/img/projects/panel-konveyor.jpg"
    • Di teks "about" dan "tagline", bungkus kata kunci dengan [[...]]
-     supaya diberi stabilo warna, mis. "bidang [[otomasi industri]]".
+     supaya ditebalkan, mis. "bidang [[otomasi industri]]".
    ===================================================================== */
 
 window.PORTFOLIO = {
@@ -76,11 +76,9 @@ window.PORTFOLIO = {
     website: "https://littlegusz.github.io/" // alamat website ini; ditulis di PDF portofolio (video project ada di sini)
   },
 
-  /* ---------- PITA BERJALAN (di bawah hero) ----------
-     front: pita kuning, biasanya tools/software
-     back : pita biru, kata kunci bidang kerja
-     Kosongkan front: [] untuk otomatis ambil dari daftar skill;
-     kosongkan back: [] untuk menyembunyikan pita biru.                 */
+  /* ---------- PITA BERJALAN ----------
+     Tidak ditampilkan lagi sejak tampilan dark mode (pita berjalannya dihapus).
+     Datanya dibiarkan di sini kalau suatu saat mau dipakai lagi.        */
   ticker: {
     front: [
       "CX-Programmer", "GX Works", "CX-Designer",
